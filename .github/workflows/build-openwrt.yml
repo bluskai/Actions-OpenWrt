@@ -52,6 +52,12 @@ jobs:
           # ln -s /mnt/openwrt/feeds ./feeds
           # ln -s /mnt/openwrt/staging_dir ./staging_dir
           df -h
+          
+      - name: Clone source code
+        run: |
+          git clone https://github.com/coolsnowwolf/lede
+          mv -f ./lede/* .
+          
       - name: Update feeds
         run: |
           ./scripts/feeds update -a
