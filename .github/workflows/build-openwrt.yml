@@ -1,144 +1,159 @@
-#=================================================
-# https://github.com/P3TERX/Actions-OpenWrt
-# Description: Build OpenWrt using GitHub Actions
-# Lisence: MIT
-# Author: P3TERX
-# Blog: https://p3terx.com
-#=================================================
+#
+# This is free software, lisence use MIT.
+# 
+# Copyright (C) 2019 P3TERX <https://p3terx.com>
+# Copyright (C) 2019 KFERMercer <KFER.Mercer@gmail.com>
+# 
+# <https://github.com/KFERMercer/OpenWrt-CI>
+#
 
-name: Build OpenWrt
+name: OpenWrt-CI
 
 on:
-  repository_dispatch:
-  release:
-    types: published
   push:
-    branches:
+    branches: 
       - master
-    paths:
-      - '.config'
-#  schedule:
-#    - cron: 0 8 * * 5
-#  watch:
-#    types: started
-
-env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
-  FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: .config
-  DIY_P1_SH: diy-part1.sh
-  DIY_P2_SH: diy-part2.sh
-  SSH_ACTIONS: false
-  UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: true
-  UPLOAD_COWTRANSFER: false
-  UPLOAD_WETRANSFER: false
-  TZ: Asia/Shanghai
+  # schedule:
+  #   - cron: 0 20 * * *
+  # release:
+  #   types: [published]
 
 jobs:
-  build:
+
+  build_openwrt:
+
+    name: Build OpenWrt
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
 
-    - name: Initialization environment
-      env:
-        DEBIAN_FRONTEND: noninteractive
-      run: |
-        sudo swapoff /swapfile
-        sudo rm -rf /swapfile /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        sudo -E apt-get -qq update
-        sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
-        sudo timedatectl set-timezone "$TZ"
-        curl -fsSL https://raw.githubusercontent.com/P3TERX/dotfiles/master/.bashrc >> ~/.bashrc
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          ref: master
 
-    - name: Clone source code
-      run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+      - name: Space cleanup
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          docker rmi `docker images -q`
+          sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
+          sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php*
+          sudo -E apt-get update
+          sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf
+          sudo -E apt-get -y autoremove --purge
+          sudo -E apt-get clean
+          # sudo mkdir -p -m 777 /mnt/openwrt/bin /mnt/openwrt/build_dir/host /mnt/openwrt/build_dir/hostpkg /mnt/openwrt/dl /mnt/openwrt/feeds /mnt/openwrt/staging_dir
+          # ln -s /mnt/openwrt/bin ./bin
+          # mkdir -p ./build_dir/host && ln -s /mnt/openwrt/build_dir/host ./build_dir/host
+          # mkdir -p ./build_dir/host && ln -s /mnt/openwrt/build_dir/hostpkg ./build_dir/hostpkg
+          # ln -s /mnt/openwrt/dl ./dl
+          # ln -s /mnt/openwrt/feeds ./feeds
+          # ln -s /mnt/openwrt/staging_dir ./staging_dir
+          df -h
+      - name: Update feeds
+        run: |
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+      - name: Generate configuration file
+        run: |
+          rm -f ./.config*
+          touch ./.config
+          touch ./diy.sh 
+          #
+          # ========================固件定制部分========================
+          # 
+          # 
+          # 如果不对本区块做出任何编辑, 则生成默认配置固件. 
+          # 
+          # 以下为定制化固件选项和说明:
+          #
+          #
+          # 有些插件/选项是默认开启的, 如果想要关闭, 请参照以下示例进行编写:
+          # 
+          #          =========================================
+          #         |  # 取消编译VMware镜像:                   |
+          #         |  cat >> .config <<EOF                   |
+          #         |  # CONFIG_VMDK_IMAGES is not set        |
+          #         |  EOF                                    |
+          #          =========================================
+          #
+          # 
+          # 以下是一些提前准备好的一些插件选项.
+          # 直接取消注释相应代码块即可应用. 不要取消注释代码块上的汉字说明.
+          # 如果不需要代码块里的某一项配置, 只需要删除相应行.
+          #
+          # 如果需要其他插件, 请按照示例自行添加.
+          # 注意, 只需添加依赖链顶端的包. 如果你需要插件 A, 同时 A 依赖 B, 即只需要添加 A.
+          # 
+          # 无论你想要对固件进行怎样的定制, 都需要且只需要修改 EOF 回环内的内容.
+          # 
+          # 编译x64固件:
+          cat >> .config <<EOF
+          CONFIG_TARGET_x86=y
+          CONFIG_TARGET_x86_64=y
+          CONFIG_TARGET_x86_64_Generic=y
+          CONFIG_TARGET_IMAGES_GZIP=y
+          # CONFIG_VMDK_IMAGES is not set
+          EOF                         
+          # 精简一些用不到的软件包:
+          cat >> .config <<EOF
+          # CONFIG_PACKAGE_autosamba is not set
+          # CONFIG_PACKAGE_luci-app-adbyby-plus is not set
+          # CONFIG_PACKAGE_luci-app-airplay2 is not set
+          # CONFIG_PACKAGE_luci-app-xlnetacc is not set
+          # CONFIG_PACKAGE_luci-app-vsftpd is not set
+          EOF
+          # 补充一些软件:
+          cat >> .config <<EOF
+          CONFIG_PACKAGE_kmod-usb-printer=y
+          CONFIG_PACKAGE_luci-app-usb-printer=y
+          CONFIG_PACKAGE_frpc=y
+          CONFIG_PACKAGE_luci-app-frpc=y
+          EOF
+          # 常用软件包:
+          cat >> .config <<EOF
+          CONFIG_PACKAGE_curl=y
+          CONFIG_PACKAGE_nano=y
+          EOF       
+          # 修改LAN口默认IP地址:
+          cat >> diy.sh <<EOF
+          sed -i 's/192.168.1.1/10.10.10.2/g' package/base-files/files/bin/config_generate
+          EOF
+          # 
+          # ========================固件定制部分结束========================
+          # 
+          sed -i 's/^[ \t]*//g' ./.config
+          chmod +x diy.sh
+          sh ./diy.sh    
+          make defconfig
+      - name: Make download
+        run: |
+          make download -j8 || make download -j1 V=s
+          find ./dl/ -size -1024c -exec rm -f {} \;
+          df -h
+      - name: Compile firmware
+        run: |
+          make -j$(nproc) || make -j1 V=s
+          echo "======================="
+          echo "Space usage:"
+          echo "======================="
+          df -h
+          echo "======================="
+          du -h ./ --max-depth=1
+          du -h /mnt/openwrt/ --max-depth=1
+      - name: Prepare artifact
+        run: find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
 
-    - name: Load custom feeds
-      run: |
-        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-        chmod +x $DIY_P1_SH
-        cd openwrt
-        ../$DIY_P1_SH
+      - name: Upload config.seed
+        uses: actions/upload-artifact@master
+        with:
+          name: config.seed
+          path: ./bin/targets/*/*/config.seed
 
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
-
-    - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
-
-    - name: Load custom configuration
-      run: |
-        [ -e files ] && mv files openwrt/files
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        chmod +x $DIY_P2_SH
-        cd openwrt
-        ../$DIY_P2_SH
-
-    - name: SSH connection to Actions
-      uses: P3TERX/debugger-action@master
-      if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
-
-    - name: Download package
-      id: package
-      run: |
-        cd openwrt
-        make defconfig
-        make download -j8
-        find dl -size -1024c -exec ls -l {} \;
-        find dl -size -1024c -exec rm -f {} \;
-
-    - name: Compile the firmware
-      id: compile
-      run: |
-        cd openwrt
-        echo -e "$(nproc) thread compile"
-        make -j$(nproc) || make -j1 || make -j1 V=s
-        echo "::set-output name=status::success"
-        grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-        [ -s DEVICE_NAME ] && echo "::set-env name=DEVICE_NAME::_$(cat DEVICE_NAME)"
-        echo "::set-env name=FILE_DATE::_$(date +"%Y%m%d%H%M")"
-
-    - name: Upload bin directory
-      uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
-      with:
-        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/bin
-
-    - name: Organize files
-      id: organize
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-      run: |
-        cd openwrt/bin/targets/*/*
-        rm -rf packages
-        echo "::set-env name=FIRMWARE::$PWD"
-        echo "::set-output name=status::success"
-
-    - name: Upload firmware directory
-      uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && !cancelled()
-      with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: ${{ env.FIRMWARE }}
-
-    - name: Upload firmware to cowtransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
-        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
-
-    - name: Upload firmware to WeTransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+      - name: Upload firmware
+        uses: actions/upload-artifact@master
+        with:
+          name: OpenWrt_firmware
+          path: ./bin/targets/
