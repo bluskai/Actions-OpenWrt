@@ -180,5 +180,5 @@ jobs:
       - name: Upload firmware
         uses: actions/upload-artifact@master
         with:
-          name: OpenWrt_firmware
-          path: ./bin/targets/
+          name: openwrt-x86-64-combined-squashfs.img.gz
+          path: ./bin/targets/*/*/openwrt-x86-64-combined-squashfs.img.gz
