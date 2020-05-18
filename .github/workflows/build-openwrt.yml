@@ -13,8 +13,8 @@ on:
   push:
     branches: 
       - master
-  schedule:
-    - cron: 20 20 * * *
+  # schedule:
+  #   - cron: 20 20 * * *
   # release:
   #   types: [published]
 
@@ -57,7 +57,7 @@ jobs:
           
       - name: Clone source code
         run: |
-          git clone https://github.com/coolsnowwolf/lede
+          git clone --branch 20200416 https://github.com/coolsnowwolf/lede
           mv -f ./lede/* .
           rm -rf ./lede
           
