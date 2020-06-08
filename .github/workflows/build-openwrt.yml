@@ -62,6 +62,7 @@ jobs:
           mv -f ./helloworld/luci-app-ssr-plus ./lede/package/lean/
           mv -f ./lede/* .
           rm -rf ./lede
+          rm -rf ./helloworld
           
       - name: Update feeds
         run: |
