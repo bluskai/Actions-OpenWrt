@@ -57,7 +57,9 @@ jobs:
           
       - name: Clone source code
         run: |
-          git clone --branch 20200416 https://github.com/coolsnowwolf/lede
+          git clone https://github.com/coolsnowwolf/lede
+          git clone https://github.com/fw876/helloworld
+          mv -f ./helloworld/luci-app-ssr-plus ./lede/package/lean/
           mv -f ./lede/* .
           rm -rf ./lede
           
