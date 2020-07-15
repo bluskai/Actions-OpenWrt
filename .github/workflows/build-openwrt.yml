@@ -123,18 +123,11 @@ jobs:
           # CONFIG_PACKAGE_luci-app-adbyby-plus is not set
           # CONFIG_PACKAGE_luci-app-airplay2 is not set
           # CONFIG_PACKAGE_luci-app-amule is not set
+          # CONFIG_PACKAGE_luci-app-ipsec-vpnd is not set
           # CONFIG_PACKAGE_luci-app-music-remote-center is not set
           # CONFIG_PACKAGE_luci-app-qbittorrent is not set
           # CONFIG_PACKAGE_luci-app-vsftpd is not set
           # CONFIG_PACKAGE_luci-app-xlnetacc is not set
-          EOF
-          
-          # 补充一些软件:
-          cat >> .config <<EOF
-          CONFIG_PACKAGE_kmod-usb-printer=y
-          CONFIG_PACKAGE_luci-app-usb-printer=y
-          CONFIG_PACKAGE_frpc=y
-          CONFIG_PACKAGE_luci-app-frpc=y
           EOF
           
           # 常用软件包:
