@@ -2,7 +2,7 @@
 # This is free software, lisence use MIT.
 # 
 # Copyright (C) 2019 P3TERX <https://p3terx.com>
-# Copyright (C) 2019 KFERMercer <KFER.Mercer@gmail.com>
+# Copyright (C) 2020 KFERMercer <KFER.Mercer@gmail.com>
 # 
 # <https://github.com/KFERMercer/OpenWrt-CI>
 #
@@ -13,23 +13,25 @@ on:
   push:
     branches: 
       - master
-  schedule:
-    - cron: 20 20 * * *
-  # release:
-  #   types: [published]
+  # schedule:
+  #   - cron: 0 20 * * *
+  release:
+    types: [published]
 
 jobs:
 
   build_openwrt:
 
-    name: Build OpenWrt
+    name: Build OpenWrt firmware
+
     runs-on: ubuntu-latest
+
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
 
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
         with:
           ref: master
 
@@ -39,16 +41,17 @@ jobs:
         run: |
           docker rmi `docker images -q`
           sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
-          sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php*
+          sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php* android*
           sudo -E apt-get update
-          sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf
+          sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf swig
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
 
           # sudo mkdir -p -m 777 /mnt/openwrt/bin /mnt/openwrt/build_dir/host /mnt/openwrt/build_dir/hostpkg /mnt/openwrt/dl /mnt/openwrt/feeds /mnt/openwrt/staging_dir
           # ln -s /mnt/openwrt/bin ./bin
-          # mkdir -p ./build_dir/host && ln -s /mnt/openwrt/build_dir/host ./build_dir/host
-          # mkdir -p ./build_dir/host && ln -s /mnt/openwrt/build_dir/hostpkg ./build_dir/hostpkg
+          # mkdir -p ./build_dir
+          # ln -s -f /mnt/openwrt/build_dir/host ./build_dir/host
+          # ln -s -f /mnt/openwrt/build_dir/hostpkg ./build_dir/hostpkg
           # ln -s /mnt/openwrt/dl ./dl
           # ln -s /mnt/openwrt/feeds ./feeds
           # ln -s /mnt/openwrt/staging_dir ./staging_dir
@@ -73,39 +76,9 @@ jobs:
         run: |
           rm -f ./.config*
           touch ./.config
-          touch ./diy.sh 
-
+          
           #
           # ========================固件定制部分========================
-          # 
-
-          # 
-          # 如果不对本区块做出任何编辑, 则生成默认配置固件. 
-          # 
-
-          # 以下为定制化固件选项和说明:
-          #
-
-          #
-          # 有些插件/选项是默认开启的, 如果想要关闭, 请参照以下示例进行编写:
-          # 
-          #          =========================================
-          #         |  # 取消编译VMware镜像:                   |
-          #         |  cat >> .config <<EOF                   |
-          #         |  # CONFIG_VMDK_IMAGES is not set        |
-          #         |  EOF                                    |
-          #          =========================================
-          #
-
-          # 
-          # 以下是一些提前准备好的一些插件选项.
-          # 直接取消注释相应代码块即可应用. 不要取消注释代码块上的汉字说明.
-          # 如果不需要代码块里的某一项配置, 只需要删除相应行.
-          #
-          # 如果需要其他插件, 请按照示例自行添加.
-          # 注意, 只需添加依赖链顶端的包. 如果你需要插件 A, 同时 A 依赖 B, 即只需要添加 A.
-          # 
-          # 无论你想要对固件进行怎样的定制, 都需要且只需要修改 EOF 回环内的内容.
           # 
 
           # 编译x64固件:
@@ -115,8 +88,8 @@ jobs:
           CONFIG_TARGET_x86_64_Generic=y
           CONFIG_TARGET_IMAGES_GZIP=y
           # CONFIG_VMDK_IMAGES is not set
-          EOF                  
-
+          EOF
+          
           # 精简一些用不到的软件包:
           cat >> .config <<EOF
           # CONFIG_PACKAGE_autosamba is not set
@@ -140,11 +113,11 @@ jobs:
           cat >> diy.sh <<EOF
           sed -i 's/192.168.1.1/10.10.10.2/g' package/base-files/files/bin/config_generate
           EOF
-
+          
           # 
           # ========================固件定制部分结束========================
           # 
-
+          
           sed -i 's/^[ \t]*//g' ./.config
           chmod +x diy.sh
           sh ./diy.sh  
@@ -153,7 +126,7 @@ jobs:
       - name: Make download
         run: |
           make download -j8 || make download -j1 V=s
-          find ./dl/ -size -1024c -exec rm -f {} \;
+          rm -rf $(find ./dl/ -size -1024c)
           df -h
 
       - name: Compile firmware
@@ -165,19 +138,41 @@ jobs:
           df -h
           echo "======================="
           du -h ./ --max-depth=1
-          # du -h /mnt/openwrt/ --max-depth=1
+          du -h /mnt/openwrt/ --max-depth=1 || true
 
       - name: Prepare artifact
-        run: find ./bin/targets/ -type d -name "packages" | xargs rm -rf {}
+        run: |
+          mkdir -p ./artifact/firmware
+          mkdir -p ./artifact/package
+          mkdir -p ./artifact/buildinfo
+          rm -rf $(find ./bin/targets/ -type d -name "packages")
+          cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+          cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+          cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
 
-      - name: Upload config.seed
-        uses: actions/upload-artifact@master
+      - name: Deliver buildinfo
+        uses: actions/upload-artifact@v2
         with:
-          name: config.seed
-          path: ./bin/targets/*/*/config.seed
+          name: OpenWrt_buildinfo
+          path: ./artifact/buildinfo/
 
-      - name: Upload firmware
-        uses: actions/upload-artifact@master
+      - name: Deliver package
+        uses: actions/upload-artifact@v2
         with:
-          name: openwrt-x86-64-combined-squashfs.img.gz
-          path: ./bin/targets/*/*/openwrt-x86-64-combined-squashfs.img.gz
+          name: OpenWrt_package
+          path: ./artifact/package/
+
+      - name: Deliver firmware
+        uses: actions/upload-artifact@v2
+        with:
+          name: OpenWrt_firmware
+          path: ./bin/targets/
+
+      - name: Upload release asset
+        if: github.event == 'release'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.YOURTOKEN }}
+          file: ./artifact/firmware/*
+          tag: ${{ github.ref }}
+          file_glob: true
