@@ -55,7 +55,7 @@ jobs:
           # ln -s /mnt/openwrt/feeds ./feeds
           # ln -s /mnt/openwrt/staging_dir ./staging_dir
           df -h
-		  
+
       - name: Clone source code
         run: |
           git clone https://github.com/coolsnowwolf/lede
@@ -64,17 +64,17 @@ jobs:
           mv -f ./lede/* .
           rm -rf ./lede
           rm -rf ./helloworld
-		  
+
       - name: Update feeds
         run: |
           ./scripts/feeds update -a
           ./scripts/feeds install -a
-		  
+
       - name: Generate configuration file
         run: |
           rm -f ./.config*
           touch ./.config
-		  
+
           #
           # ========================固件定制部分========================
           # 
@@ -115,18 +115,18 @@ jobs:
           # 
           # ========================固件定制部分结束========================
           # 
-		  
+
           sed -i 's/^[ \t]*//g' ./.config
-		  chmod +x diy.sh
+          chmod +x diy.sh
           sh ./diy.sh
           make defconfig
-		  
+
       - name: Make download
         run: |
           make download -j8 || make download -j1 V=s
           rm -rf $(find ./dl/ -size -1024c)
           df -h
-		  
+
       - name: Compile firmware
         run: |
           make -j$(nproc) || make -j1 V=s
@@ -137,7 +137,7 @@ jobs:
           echo "======================="
           du -h ./ --max-depth=1
           du -h /mnt/openwrt/ --max-depth=1 || true
-		  
+
       - name: Prepare artifact
         run: |
           mkdir -p ./artifact/firmware
@@ -147,7 +147,7 @@ jobs:
           cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
-		  
+
       - name: Deliver buildinfo
         uses: actions/upload-artifact@v2
         with:
