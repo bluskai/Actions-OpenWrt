@@ -84,7 +84,6 @@ jobs:
           CONFIG_TARGET_x86=y
           CONFIG_TARGET_x86_64=y
           CONFIG_TARGET_x86_64_Generic=y
-          CONFIG_TARGET_IMAGES_GZIP=y
           # CONFIG_VMDK_IMAGES is not set
           EOF
           
