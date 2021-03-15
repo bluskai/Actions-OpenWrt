@@ -1,9 +1,10 @@
 name: OpenWrt Config
 
 on:
+  workflow_dispatch:
   push:
     branches: 
-      - master
+      - main
   schedule:
     - cron: 0 20 * * *
   # release:
