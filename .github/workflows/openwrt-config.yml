@@ -2,9 +2,6 @@ name: OpenWrt Config
 
 on:
   workflow_dispatch:
-  push:
-    branches: 
-      - main
   schedule:
     - cron: 0 20 * * *
   # release:
@@ -56,7 +53,7 @@ jobs:
       - name: Prepare artifact
         run: |
           mkdir config
-          mv ./lede/.config ./upload/config
+          mv ./lede/.config ./config/config
           rm -rf lede
           cd config
           cp config config.txt
