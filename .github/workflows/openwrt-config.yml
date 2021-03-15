@@ -21,7 +21,7 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo rm -rf upload
+          sudo rm -rf config
           docker rmi `docker images -q`
           sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
           sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php*
@@ -31,7 +31,6 @@ jobs:
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
           df -h
-          rm -rf upload
           
       - name: Clone source code
         run: |
@@ -71,7 +70,7 @@ jobs:
           git config --global user.email "304055589@qq.com"
           git config --global user.name "bluskai"
           git add .
-          git commit -m "Update config file" -a
+          git commit -m "默认配置文件" -a
         
       - name: Push changes
         uses: ad-m/github-push-action@master
