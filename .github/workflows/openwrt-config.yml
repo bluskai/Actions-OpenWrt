@@ -1,4 +1,4 @@
-name: OpenWrt-Config
+name: OpenWrt Config
 
 on:
   push:
