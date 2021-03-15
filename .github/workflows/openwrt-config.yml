@@ -16,7 +16,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@master
         with:
           ref: main
 
@@ -63,7 +63,7 @@ jobs:
           mv config.txt `date "+%Y-%m-%d-%H_%M_%S"`.txt
           
       - name: Upload artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@master
         with:
           name: config
           path: ./upload/   
@@ -76,6 +76,6 @@ jobs:
           git commit -m "Update config file" -a
         
       - name: Push changes
-        uses: ad-m/github-push-action@main
+        uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
