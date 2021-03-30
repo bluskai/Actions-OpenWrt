@@ -33,8 +33,11 @@ jobs:
         run: |
           git clone https://github.com/coolsnowwolf/lede
           git clone https://github.com/linkease/ddnsto-openwrt.git
+          mkdir -p lede/package/network/services
           mv ddnsto-openwrt/ddnsto lede/package/network/services/
-          mv ddnsto-openwrt/luci-app-ddnsto lede/package/lean/
+          mkdir -p lede/package/luci/applications
+          mv ddnsto-openwrt/luci-app-ddnsto lede/package/luci/applications/
+          rm -rf ddnsto-openwrt
           
       - name: Update feeds
         run: |
