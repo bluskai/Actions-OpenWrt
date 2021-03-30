@@ -15,3 +15,8 @@ sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 # Add a feed source
 #sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
+
+# Add ddnsto
+git clone https://github.com/linkease/ddnsto-openwrt.git
+mv ddnsto-openwrt/ddnsto openwrt/package/network/services/
+mv ddnsto-openwrt/luci-app-ddnsto openwrt/package/luci/applications/
