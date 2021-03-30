@@ -32,6 +32,9 @@ jobs:
       - name: Clone source code
         run: |
           git clone https://github.com/coolsnowwolf/lede
+          git clone https://github.com/linkease/ddnsto-openwrt.git
+          mv ddnsto-openwrt/ddnsto lede/package/network/services/
+          mv ddnsto-openwrt/luci-app-ddnsto lede/package/lean/
           
       - name: Update feeds
         run: |
