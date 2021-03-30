@@ -60,6 +60,9 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        git clone https://github.com/linkease/ddnsto-openwrt.git
+        mv ddnsto-openwrt/ddnsto openwrt/package/network/services/
+        mv ddnsto-openwrt/luci-app-ddnsto openwrt/package/lean/
 
     - name: Load custom feeds
       run: |
@@ -67,12 +70,6 @@ jobs:
         chmod +x $DIY_P1_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
-
-    - name: Load ddnsto feeds
-      run: |
-        git clone https://github.com/linkease/ddnsto-openwrt.git
-        mv ddnsto-openwrt/ddnsto openwrt/package/network/services/
-        mv ddnsto-openwrt/luci-app-ddnsto openwrt/package/lean/
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
