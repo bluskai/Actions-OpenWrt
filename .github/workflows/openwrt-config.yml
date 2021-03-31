@@ -32,17 +32,12 @@ jobs:
       - name: Clone source code
         run: |
           git clone https://github.com/coolsnowwolf/lede
-          git clone https://github.com/linkease/ddnsto-openwrt.git
-          mkdir -p lede/package/network/services
-          mv ddnsto-openwrt/ddnsto lede/package/network/services/
-          mkdir -p lede/package/luci/applications
-          mv ddnsto-openwrt/luci-app-ddnsto lede/package/luci/applications/
-          rm -rf ddnsto-openwrt
           
       - name: Update feeds
         run: |
           cd lede
           sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
+          sed -i '$a src-git ddnsto https://github.com/linkease/ddnsto-openwrt' feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           
