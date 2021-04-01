@@ -61,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: config
-          path: ./config/   
+          path: ./config/
      
       - name: Commit changes
         run: |
@@ -74,3 +74,9 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete workflow runs
+        uses: GitRML/delete-workflow-runs@main
+        with:
+          retain_days: 1
+          keep_minimum_runs: 1
