@@ -37,7 +37,8 @@ jobs:
         run: |
           cd lede
           sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
-          sed -i '$a src-git ddnsto https://github.com/linkease/ddnsto-openwrt' feeds.conf.default
+          echo >> feeds.conf.default
+          echo 'src-git nas https://github.com/linkease/nas-packages.git;master' >> feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           
