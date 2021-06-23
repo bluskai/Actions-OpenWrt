@@ -11,7 +11,7 @@
 #
 
 # Uncomment a feed source
-sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
+# sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 # Add a feed source
 #sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
@@ -19,3 +19,7 @@ sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 # Add nas-packages feed source
 echo >> feeds.conf.default
 echo 'src-git nas https://github.com/linkease/nas-packages.git;master' >> feeds.conf.default
+
+# Add helloworld feed source
+echo >> feeds.conf.default
+echo 'src-git helloworld https://github.com/fw876/helloworld.git;master' >> feeds.conf.default
