@@ -95,6 +95,7 @@ CONFIG_DEFAULT_kmod-e1000=y
 CONFIG_DEFAULT_kmod-e1000e=y
 CONFIG_DEFAULT_kmod-forcedeth=y
 CONFIG_DEFAULT_kmod-fs-f2fs=y
+CONFIG_DEFAULT_kmod-fs-vfat=y
 CONFIG_DEFAULT_kmod-i40e=y
 CONFIG_DEFAULT_kmod-i40evf=y
 CONFIG_DEFAULT_kmod-igb=y
@@ -143,6 +144,7 @@ CONFIG_DEFAULT_luci-app-ddns=y
 CONFIG_DEFAULT_luci-app-filetransfer=y
 CONFIG_DEFAULT_luci-app-ipsec-vpnd=y
 CONFIG_DEFAULT_luci-app-nlbwmon=y
+CONFIG_DEFAULT_luci-app-pptp-server=y
 CONFIG_DEFAULT_luci-app-qbittorrent=y
 CONFIG_DEFAULT_luci-app-ramfree=y
 CONFIG_DEFAULT_luci-app-ssr-plus=y
@@ -2467,7 +2469,7 @@ CONFIG_PACKAGE_kmod-fast-classifier=y
 # CONFIG_PACKAGE_kmod-fou is not set
 # CONFIG_PACKAGE_kmod-fou6 is not set
 # CONFIG_PACKAGE_kmod-geneve is not set
-# CONFIG_PACKAGE_kmod-gre is not set
+CONFIG_PACKAGE_kmod-gre=y
 # CONFIG_PACKAGE_kmod-gre6 is not set
 # CONFIG_PACKAGE_kmod-ip-vti is not set
 # CONFIG_PACKAGE_kmod-ip6-tunnel is not set
@@ -2476,6 +2478,7 @@ CONFIG_PACKAGE_kmod-fast-classifier=y
 CONFIG_PACKAGE_kmod-ipsec=y
 CONFIG_PACKAGE_kmod-ipsec4=y
 CONFIG_PACKAGE_kmod-ipsec6=y
+CONFIG_PACKAGE_kmod-iptunnel=y
 CONFIG_PACKAGE_kmod-iptunnel4=y
 CONFIG_PACKAGE_kmod-iptunnel6=y
 # CONFIG_PACKAGE_kmod-isdn4linux is not set
@@ -4504,6 +4507,7 @@ CONFIG_PACKAGE_luci-app-nlbwmon=y
 # CONFIG_PACKAGE_luci-app-pagekitec is not set
 # CONFIG_PACKAGE_luci-app-polipo is not set
 # CONFIG_PACKAGE_luci-app-pppoe-relay is not set
+CONFIG_PACKAGE_luci-app-pptp-server=y
 # CONFIG_PACKAGE_luci-app-privoxy is not set
 # CONFIG_PACKAGE_luci-app-ps3netsrv is not set
 CONFIG_PACKAGE_luci-app-qbittorrent=y
@@ -4542,8 +4546,8 @@ CONFIG_PACKAGE_TURBOACC_INCLUDE_BBR_CCA=y
 # CONFIG_PACKAGE_luci-app-udpxy is not set
 # CONFIG_PACKAGE_luci-app-uhttpd is not set
 CONFIG_PACKAGE_luci-app-unblockmusic=y
-CONFIG_UnblockNeteaseMusic_Go=y
-# CONFIG_UnblockNeteaseMusic_NodeJS is not set
+CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic_Go=y
+# CONFIG_PACKAGE_luci-app-unblockmusic_INCLUDE_UnblockNeteaseMusic_NodeJS is not set
 # CONFIG_PACKAGE_luci-app-unbound is not set
 CONFIG_PACKAGE_luci-app-upnp=y
 # CONFIG_PACKAGE_luci-app-usb-printer is not set
@@ -4703,6 +4707,7 @@ CONFIG_PACKAGE_luci-i18n-ipsec-vpnd-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-nlbwmon-ja is not set
 # CONFIG_PACKAGE_luci-i18n-nlbwmon-ru is not set
 CONFIG_PACKAGE_luci-i18n-nlbwmon-zh-cn=y
+CONFIG_PACKAGE_luci-i18n-pptp-server-zh-cn=y
 CONFIG_PACKAGE_luci-i18n-qbittorrent-zh-cn=y
 CONFIG_PACKAGE_luci-i18n-ramfree-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-samba-ca is not set
@@ -4845,6 +4850,9 @@ CONFIG_POSTFIX_PCRE=y
 # end of Streaming
 
 # CONFIG_PACKAGE_UnblockNeteaseMusic is not set
+CONFIG_PACKAGE_UnblockNeteaseMusic-Go=y
+# CONFIG_UNBLOCKNETEASEMUSIC_GO_COMPRESS_GOPROXY is not set
+CONFIG_UNBLOCKNETEASEMUSIC_GO_COMPRESS_UPX=y
 # CONFIG_PACKAGE_ffmpeg is not set
 # CONFIG_PACKAGE_ffprobe is not set
 # CONFIG_PACKAGE_fswebcam is not set
@@ -5241,13 +5249,6 @@ CONFIG_PACKAGE_wsdd2=y
 # end of NTRIP
 
 #
-# NeteaseMusic
-#
-CONFIG_PACKAGE_UnblockNeteaseMusicGo=y
-CONFIG_UnblockNeteaseMusicGo_INCLUDE_GOPROXY=y
-# end of NeteaseMusic
-
-#
 # OLSR.org network framework
 #
 # CONFIG_PACKAGE_oonf-dlep-proxy is not set
@@ -5488,7 +5489,7 @@ CONFIG_PACKAGE_ip-tiny=y
 # CONFIG_PACKAGE_openvpn-mbedtls is not set
 # CONFIG_PACKAGE_openvpn-openssl is not set
 # CONFIG_PACKAGE_openvpn-wolfssl is not set
-# CONFIG_PACKAGE_pptpd is not set
+CONFIG_PACKAGE_pptpd=y
 # CONFIG_PACKAGE_softethervpn-base is not set
 # CONFIG_PACKAGE_softethervpn-bridge is not set
 # CONFIG_PACKAGE_softethervpn-client is not set
