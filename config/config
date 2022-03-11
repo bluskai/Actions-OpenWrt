@@ -3024,6 +3024,7 @@ CONFIG_PACKAGE_luci-lib-fs=y
 # CONFIG_PACKAGE_node-npm is not set
 # CONFIG_PACKAGE_node-serialport is not set
 # CONFIG_PACKAGE_node-serialport-bindings is not set
+# CONFIG_PACKAGE_node-yarn is not set
 # end of Node.js
 
 #
@@ -3215,8 +3216,6 @@ CONFIG_PACKAGE_luci-lib-fs=y
 # CONFIG_PACKAGE_python3-s3transfer is not set
 # CONFIG_PACKAGE_python3-schedule is not set
 # CONFIG_PACKAGE_python3-schema is not set
-# CONFIG_PACKAGE_python3-seafile-ccnet is not set
-# CONFIG_PACKAGE_python3-searpc is not set
 # CONFIG_PACKAGE_python3-sentry-sdk is not set
 # CONFIG_PACKAGE_python3-sepolgen is not set
 # CONFIG_PACKAGE_python3-sepolicy is not set
@@ -3249,6 +3248,7 @@ CONFIG_PACKAGE_luci-lib-fs=y
 # CONFIG_PACKAGE_python3-voluptuous-serialize is not set
 # CONFIG_PACKAGE_python3-wcwidth is not set
 # CONFIG_PACKAGE_python3-websocket-client is not set
+# CONFIG_PACKAGE_python3-websockets is not set
 # CONFIG_PACKAGE_python3-werkzeug is not set
 # CONFIG_PACKAGE_python3-xml is not set
 # CONFIG_PACKAGE_python3-xmltodict is not set
@@ -4239,7 +4239,6 @@ CONFIG_PACKAGE_libreadline=y
 # CONFIG_PACKAGE_libsamplerate is not set
 # CONFIG_PACKAGE_libsane is not set
 # CONFIG_PACKAGE_libsasl2 is not set
-# CONFIG_PACKAGE_libsearpc is not set
 # CONFIG_PACKAGE_libseccomp is not set
 # CONFIG_PACKAGE_libselinux is not set
 # CONFIG_PACKAGE_libsemanage is not set
@@ -4416,29 +4415,29 @@ CONFIG_PACKAGE_luci-base=y
 #
 # Translations
 #
-# CONFIG_LUCI_LANG_uk is not set
 # CONFIG_LUCI_LANG_hu is not set
 # CONFIG_LUCI_LANG_pt is not set
-# CONFIG_LUCI_LANG_no is not set
-# CONFIG_LUCI_LANG_en is not set
-# CONFIG_LUCI_LANG_pl is not set
 # CONFIG_LUCI_LANG_sk is not set
-# CONFIG_LUCI_LANG_ja is not set
-# CONFIG_LUCI_LANG_vi is not set
-# CONFIG_LUCI_LANG_de is not set
 # CONFIG_LUCI_LANG_ro is not set
+# CONFIG_LUCI_LANG_en is not set
+# CONFIG_LUCI_LANG_el is not set
+# CONFIG_LUCI_LANG_uk is not set
+# CONFIG_LUCI_LANG_ru is not set
+# CONFIG_LUCI_LANG_vi is not set
+# CONFIG_LUCI_LANG_he is not set
+# CONFIG_LUCI_LANG_no is not set
+# CONFIG_LUCI_LANG_pt-br is not set
 # CONFIG_LUCI_LANG_ms is not set
+# CONFIG_LUCI_LANG_pl is not set
 CONFIG_LUCI_LANG_zh-cn=y
 # CONFIG_LUCI_LANG_ko is not set
-# CONFIG_LUCI_LANG_he is not set
+# CONFIG_LUCI_LANG_de is not set
 # CONFIG_LUCI_LANG_zh-tw is not set
 # CONFIG_LUCI_LANG_tr is not set
 # CONFIG_LUCI_LANG_sv is not set
-# CONFIG_LUCI_LANG_ru is not set
-# CONFIG_LUCI_LANG_el is not set
+# CONFIG_LUCI_LANG_ja is not set
 # CONFIG_LUCI_LANG_ca is not set
 # CONFIG_LUCI_LANG_es is not set
-# CONFIG_LUCI_LANG_pt-br is not set
 # CONFIG_LUCI_LANG_cs is not set
 # CONFIG_LUCI_LANG_fr is not set
 # CONFIG_LUCI_LANG_it is not set
@@ -4505,6 +4504,7 @@ CONFIG_PACKAGE_luci-app-firewall=y
 # CONFIG_PACKAGE_luci-app-hd-idle is not set
 # CONFIG_PACKAGE_luci-app-hnet is not set
 # CONFIG_PACKAGE_luci-app-https-dns-proxy is not set
+# CONFIG_PACKAGE_luci-app-ipsec-server is not set
 CONFIG_PACKAGE_luci-app-ipsec-vpnd=y
 # CONFIG_PACKAGE_luci-app-kodexplorer is not set
 # CONFIG_PACKAGE_luci-app-linkease is not set
@@ -5963,7 +5963,6 @@ CONFIG_PACKAGE_libipset=y
 # CONFIG_PACKAGE_mosquitto-client-ssl is not set
 # CONFIG_PACKAGE_mosquitto-nossl is not set
 # CONFIG_PACKAGE_mosquitto-ssl is not set
-# CONFIG_PACKAGE_mrd6 is not set
 # CONFIG_PACKAGE_mstpd is not set
 # CONFIG_PACKAGE_mtr is not set
 # CONFIG_PACKAGE_nbd is not set
@@ -6047,7 +6046,6 @@ CONFIG_PACKAGE_SAMBA_MAX_DEBUG_LEVEL=-1
 # CONFIG_PACKAGE_samplicator is not set
 # CONFIG_PACKAGE_scapy is not set
 # CONFIG_PACKAGE_sctp-tools is not set
-# CONFIG_PACKAGE_seafile-ccnet is not set
 # CONFIG_PACKAGE_ser2net is not set
 # CONFIG_PACKAGE_simple-adblock is not set
 CONFIG_PACKAGE_simple-obfs-client=y
