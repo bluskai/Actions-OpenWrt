@@ -8,5 +8,4 @@
 * 解锁网易云灰色歌曲
 * KMS 服务器
 * DDNS.to内网穿透
-* Frp 内网穿透
 * ZeroTier
